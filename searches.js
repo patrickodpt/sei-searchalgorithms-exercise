@@ -18,36 +18,41 @@ function binarySearch(arr, element){
     }
 }
 
-function recursiveBinarySearch(arr, element, start = 0, end = arr.length - 1){
+let recursionCounter = 0; //will be use to save original array below
+
+function recursiveBinarySearch(arr, element, start = 0, end = arr.length){
     //  search through the array recursively for the element
     //  you may need to add more parameters to this function!
     //  if the element is not found, return -1
     //  if the element is found, return the index at which it was found
+
     let midElement;
-    let elementIndex;
-    console.log(`array: ${arr}`);
-    if (arr.length % 2 == 0) {
-      elementIndex = (arr.length / 2) - 1 //gets element just to left of center
-      midElement = arr[elementIndex]
-      console.log(`EVEN: ${midElement}`);
+    let midElementIndex;
+    let arrPartition = arr.slice(start, end)
 
+    if (arrPartition.length < 1 && arrPartition[start] != element) {
+      return -1
+    } else if (arrPartition.length == 1 && arrPartition[start] == element) {
+      return midElementIndex
+    } else if (arrPartition.length % 2 == 0) {
+      midElementIndex = (arrPartition.length / 2) - 1 //gets element just to left of center
+      midElement = arrPartition[midElementIndex]
     } else {
-      elementIndex = Math.floor(arr.length / 2)
-      midElement = arr[elementIndex]
-      console.log(`ODD: ${midElement}`);
-
+      midElementIndex = Math.floor(arrPartition.length / 2)
+      midElement = arrPartition[midElementIndex]
     }
 
-    //INFINITE LOOP WON'T SOLVE TONIGHT
-    if (arr.length == 1 || midElement == element) {
-      return elementIndex
+    if (midElement == element) {
+      
+      return midElementIndex
+
     } else if (element < midElement) {
-      recursiveBinarySearch(arr, element, 0, elementIndex - 1)
+      recursionCounter++
+      return recursiveBinarySearch(arrPartition, element, start = 0, end = midElementIndex)
     } else if (element > midElement) {
-      recursiveBinarySearch(arr, element, elementIndex + 1, end)
+      recursionCounter++
+      return recursiveBinarySearch(arrPartition, element, start = midElementIndex + 1, end = arrPartition.length)
     }
-
-    return -100
 }
 
 module.exports = {
